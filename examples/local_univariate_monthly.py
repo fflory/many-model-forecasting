@@ -91,7 +91,7 @@ def transform_group(df):
 
 # COMMAND ----------
 
-catalog = "mmf"  # Name of the catalog we use to manage our assets
+catalog = "felixflory"  # Name of the catalog we use to manage our assets
 db = "m4"  # Name of the schema we use to manage our assets (e.g. datasets)
 user = spark.sql('select current_user() as user').collect()[0]['user'] # User email address
 
@@ -150,11 +150,11 @@ active_models = [
     "StatsForecastCrostonClassic",
     "StatsForecastCrostonOptimized",
     "StatsForecastCrostonSBA",
-    "RFableArima",
-    "RFableETS",
-    "RFableNNETAR",
-    "RFableEnsemble",
-    "RDynamicHarmonicRegression",
+    # "RFableArima",
+    # "RFableETS",
+    # "RFableNNETAR",
+    # "RFableEnsemble",
+    # "RDynamicHarmonicRegression",
     "SKTimeTBats",
     "SKTimeLgbmDsDt",
 ]
@@ -180,12 +180,12 @@ run_forecast(
     prediction_length=3,
     backtest_months=12,
     stride=1,
-    metric="smape",
+    metric="smape", # "rmse"
     train_predict_ratio=1,
     data_quality_check=True,
     resample=False,
     active_models=active_models,
-    experiment_path=f"/Users/{user}/mmf/m4_monthly",
+    experiment_path="/Users/felix.flory@databricks.com/m4monthly",
     use_case_name="m4_monthly",
 )
 

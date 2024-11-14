@@ -86,8 +86,8 @@ def transform_group(df):
 
 # COMMAND ----------
 
-catalog = "mmf" # Name of the catalog we use to manage our assets
-db = "m4" # Name of the schema we use to manage our assets (e.g. datasets)
+catalog = "felixflory" # Name of the catalog we use to manage our assets
+db = "many_model_m4" # Name of the schema we use to manage our assets (e.g. datasets)
 user = spark.sql('select current_user() as user').collect()[0]['user'] # User email address
 
 # COMMAND ----------
@@ -146,11 +146,11 @@ active_models = [
     "StatsForecastCrostonClassic",
     "StatsForecastCrostonOptimized",
     "StatsForecastCrostonSBA",
-    "RFableArima",
-    "RFableETS",
-    "RFableNNETAR",
-    "RFableEnsemble",
-    "RDynamicHarmonicRegression",
+    # "RFableArima",
+    # "RFableETS",
+    # "RFableNNETAR",
+    # "RFableEnsemble",
+    # "RDynamicHarmonicRegression",
     "SKTimeTBats",
     "SKTimeLgbmDsDt",
     ]
@@ -166,6 +166,28 @@ active_models = [
 # MAGIC While the following cell is running, you can check the status of your run on Experiments. Make sure you look for the experiments with the path you provided as `experiment_path` within `run_forecast`. On the Experiments page, you see one entry per one model (i.e. StatsForecastAutoArima). The metric provided here is a simple average over all back testing trials and all time series. This is intended to give you an initial feeling of how good each model performs on your entire data mix. But we will look into how you can scrutinize the evaluation using the `evaluation_output` table in a bit. 
 # MAGIC
 # MAGIC If you are interested in how Pandas UDF achieves parallel fitting and forecasting of multiple time series by distributing them across multiple executors, have a look at the two methods `evaluate_local_model` and `score_local_model` defined in the source code [`Forecaster.py`](https://github.com/databricks-industry-solutions/many-model-forecasting/blob/main/mmf_sa/Forecaster.py).
+
+# COMMAND ----------
+
+"/Users/felix.flory@databricks.com/mmf"
+from mlflow import MlflowClient
+
+# Create an experiment with a name that is unique and case sensitive.
+client = MlflowClient()
+# experiment_id = client.create_experiment(
+#     name="/Users/felix.flory@databricks.com/my-experiment",
+#     tags={"version": "v1", "priority": "P1"},
+# )
+experiment_id = "4472191626970090"
+# client.set_experiment_tag(experiment_id, "nlp.framework", "Spark NLP")
+
+# # Fetch experiment metadata information
+experiment = client.get_experiment(experiment_id)
+print(f"Name: {experiment.name}")
+print(f"Experiment_id: {experiment.experiment_id}")
+print(f"Artifact Location: {experiment.artifact_location}")
+print(f"Tags: {experiment.tags}")
+print(f"Lifecycle_stage: {experiment.lifecycle_stage}")
 
 # COMMAND ----------
 
@@ -187,7 +209,8 @@ run_forecast(
     data_quality_check=True,
     resample=False,
     active_models=active_models,
-    experiment_path=f"/Users/{user}/mmf/m4_daily",
+    # experiment_path=f"/Users/{user}/mmf/m4_daily",
+    experiment_path="/Users/felix.flory@databricks.com/mmf",
     use_case_name="m4_daily",
 )
 
